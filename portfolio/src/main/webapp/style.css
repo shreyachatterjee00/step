@@ -1,9 +1,45 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
+#header {
+    font-family:monospace;
+    font-size:300%;
+    margin-top:20%;
+    margin-left:30%;
 }
 
-#greeting-container {
-  margin-top: 20px;
+ul {
+    list-style-type:none;
+    margin-left:27.75%;
+}
+li {
+  float: left;
+  padding-right:20px;
+  padding-left:20px;
+}
+
+li a {
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 24px 24px;
+  text-decoration: none;
+  font-size:120%;
+  background-color: #9FA0C3;
+  border-bottom-style:solid;
+  border-bottom-color: #3C617C;
+  font-style:italic;
+}
+
+li a:hover {
+  background-color: #89C8D2;
+}
+
+.background {
+    margin-left: 29.75%;
+    margin-top: 7%;
+    margin-right:43%;
+    padding-right:20px;
+    padding-left:20px;
+    padding-top:20px;
+    padding-bottom:20px;
+    font-family: monospace;
+    background-color:#89C8D2;
 }

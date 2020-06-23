@@ -12,17 +12,52 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * Adds a random greeting to the page.
- */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+/*
+Shows about text when the "About" button is pressed.
+*/
+function showAbout () {
+    aboutText = "I'm a rising junior at UCLA, majoring in Linguistics and Computer Science (that's one major)! In my free time, I enjoy reading and playing the piano. \n\n Recently, I've started learning to cook (I'm going to need this for my college apartment next year) and playing Stardew Valley (turns out video games are a great way to stay connected to friends during this time)!";
+    var aboutContainer = document.getElementById('aboutSpace');
+    //if about pressed, either remove / show about text depending on what is already there
+    if (aboutContainer.innerText === "") {
+        //change inner text to about text, and div class to CSS about class
+        aboutContainer.innerText = aboutText;
+        aboutContainer.className="background";
+    }
+    else {
+        aboutContainer.innerText = "";
+        aboutContainer.className="";
+    }
+}
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+/*
+Shows pictures when the "Pictures" button is pressed.
+*/
+function showPics() {
+    //array of images
+    let imgs = ["ucla1.JPG", "ucla2.jpg.JPG", "book.JPG", "harrypotter.JPG"]
+    //random int from 0 - 4
+    var randInt = (Math.floor(Math.random() * 5));
+    var randImg = imgs[randInt];
+    
 
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+
+    var img1 = "images/ucla1.JPG";
+    var div = document.getElementById('picSpace');
+    var picContainer = document.getElementById('picSpace').getElementsByTagName('img')[0];
+
+    //if pictures pressed, either remove / show picture depending on what is already there
+    if (picContainer.src==="https://8080-0ba309ed-2f3c-4b55-83b6-7741ff94bec3.us-west1.cloudshell.dev/base") {
+        picContainer.src = "https://8080-0ba309ed-2f3c-4b55-83b6-7741ff94bec3.us-west1.cloudshell.dev/images/" + randImg;
+        picContainer.style.display = 'block';
+        div.className = 'background';
+        
+        
+    }
+    else {
+        picContainer.src="https://8080-0ba309ed-2f3c-4b55-83b6-7741ff94bec3.us-west1.cloudshell.dev/base";
+        picContainer.style.display = 'none';
+        div.className ="";
+    }
+    
 }
