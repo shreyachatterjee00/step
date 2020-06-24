@@ -16,7 +16,7 @@
 function showAbout () {
     const aboutText = "I'm a rising junior at UCLA, majoring in Linguistics and Computer Science (that's one major)! In my free time, I enjoy reading and playing the piano. \n\n Recently, I've started learning to cook (I'm going to need this for my college apartment next year) and playing Stardew Valley (turns out video games are a great way to stay connected to friends during this time)!";
     const aboutContainer = document.getElementById('aboutSpace');
-    //Change the text in the aboutSpace element 
+    // Change the text in the aboutSpace element 
     if (aboutContainer.innerText === "") {
         //Change inner text to about text, and div class to CSS about class
         aboutContainer.innerText = aboutText;
