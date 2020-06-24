@@ -22,11 +22,10 @@ function showAbout () {
 
     // Change the text in the aboutSpace element 
     if (aboutText.className === "about-hide") {
-        // Change inner text to about text, and div class to CSS about class
-        //aboutContainer.innerText = aboutText;
         aboutText.className = "about-show";
         aboutContainer.className = "background";
     }
+    
     else {
         //aboutContainer.innerText = "";
         aboutText.className = "about-hide";
