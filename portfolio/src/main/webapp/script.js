@@ -14,17 +14,23 @@
 
 /* Shows about text when the "About" button is pressed. */
 function showAbout () {
-    const aboutText = "I'm a rising junior at UCLA, majoring in Linguistics and Computer Science (that's one major)! In my free time, I enjoy reading and playing the piano. \n\n Recently, I've started learning to cook (I'm going to need this for my college apartment next year) and playing Stardew Valley (turns out video games are a great way to stay connected to friends during this time)!";
     const aboutContainer = document.getElementById('aboutSpace');
-    //Change the text in the aboutSpace element 
-    if (aboutContainer.innerText === "") {
-        //Change inner text to about text, and div class to CSS about class
-        aboutContainer.innerText = aboutText;
+    aboutTest = aboutContainer.getElementsByTagName('p');
+    if (aboutTest.length > 0) {
+        aboutText = aboutContainer.getElementsByTagName('p')[0];
+    }
+
+    // Change the text in the aboutSpace element 
+    if (aboutText.className === "about-hide") {
+        // Change inner text to about text, and div class to CSS about class
+        //aboutContainer.innerText = aboutText;
+        aboutText.className = "about-show";
         aboutContainer.className = "background";
     }
     else {
-        aboutContainer.innerText = "";
-        aboutContainer.className= "";
+        //aboutContainer.innerText = "";
+        aboutText.className = "about-hide";
+        aboutContainer.className = "";
     }
 }
 
@@ -34,19 +40,22 @@ function showPics() {
     const srcBase = "https://8080-0ba309ed-2f3c-4b55-83b6-7741ff94bec3.us-west1.cloudshell.dev/base"
     const picPath = "https://8080-0ba309ed-2f3c-4b55-83b6-7741ff94bec3.us-west1.cloudshell.dev/images/"
     
-    //Random int from 0 - size of images array
+    // Calculate a random index for the img array 
     const randInt = (Math.floor(Math.random() * imgs.length));
     const randImg = imgs[randInt];
     
     const div = document.getElementById('picSpace');
-    const picContainer = div.getElementsByTagName('img')[0];
+    const imgArr = div.getElementsByTagName('img');
 
-    //If pictures pressed, either remove / show picture depending on what is already there
+    if (imgArr.length > 0) {
+        picContainer = imgArr[0];
+    }
+
+    // If pictures pressed, either remove / show picture depending on what is already there
     if (picContainer.src === srcBase) {
         picContainer.src = picPath + randImg;
         picContainer.className = "displayImage";
-        div.className = 'background';
-        
+        div.className = "background";
     }
     else {
         picContainer.src = srcBase;

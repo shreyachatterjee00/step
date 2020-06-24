@@ -1,34 +1,34 @@
-.siteBackground {
+.site-background {
   background-color:#94B4CB;
 }
 
 .header {
-  font-family:monospace;
-  font-size:300%;
-  margin-left:30%;
-  margin-top:20%;
+  font-family: monospace;
+  font-size: 300%;
+  margin-left: 30%;
+  margin-top: 20%;
 }
 
 ul {
-  list-style-type:none;
-  margin-left:27.75%;
+  list-style-type: none;
+  margin-left: 27.75%;
 }
 
 li {
   float: left;
-  padding-right:20px;
-  padding-left:20px;
+  padding-right: 20px;
+  padding-left: 20px;
 }
 
 li a {
   background-color: #9FA0C3;
   border-bottom-color: #3C617C;
-  border-bottom-style:solid;
+  border-bottom-style: solid;
   display: block;
   color: black;
-  font-family:monospace;
-  font-size:120%;
-  font-style:italic;
+  font-family: monospace;
+  font-size: 120%;
+  font-style: italic;
   padding: 24px 24px;
   text-align: center;
   text-decoration: none;
@@ -42,12 +42,12 @@ li a:hover {
   background-color:#89C8D2;
   font-family: monospace;
   margin-left: 29.75%;
-  margin-right:43%;
+  margin-right: 43%;
   margin-top: 7%;
-  padding-bottom:20px;
-  padding-left:20px;
-  padding-right:20px;
-  padding-top:20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
 }
 
 .image {
@@ -58,5 +58,13 @@ li a:hover {
 .displayImage {
   display: block;
   width: 650px;
+}
+
+.about-hide {
+    display: none;
+}
+
+.about-show {
+    display: block;
 }
 
