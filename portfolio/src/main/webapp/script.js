@@ -18,7 +18,7 @@ function showAbout () {
     const aboutContainer = document.getElementById('aboutSpace');
     // Change the text in the aboutSpace element 
     if (aboutContainer.innerText === "") {
-        //Change inner text to about text, and div class to CSS about class
+        // Change inner text to about text, and div class to CSS about class
         aboutContainer.innerText = aboutText;
         aboutContainer.className = "background";
     }
