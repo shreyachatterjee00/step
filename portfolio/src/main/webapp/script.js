@@ -14,52 +14,56 @@
 
 /* Shows about text when the "About" button is pressed. */
 function showAbout () {
-    const aboutContainer = document.getElementById('aboutSpace');
-    aboutTest = aboutContainer.getElementsByTagName('p');
-    if (aboutTest.length > 0) {
-        aboutText = aboutContainer.getElementsByTagName('p')[0];
-    }
+  const aboutContainer = document.getElementById('aboutSpace');
+  aboutArr = aboutContainer.getElementsByTagName('p');
 
+  let aboutText; 
+
+  if (aboutArr.length > 0) {
+    aboutText = aboutContainer.getElementsByTagName('p')[0];
+  }
+
+  if (aboutText) {
     // Change the text in the aboutSpace element 
     if (aboutText.className === "about-hide") {
-        aboutText.className = "about-show";
-        aboutContainer.className = "background";
+      aboutText.className = "about-show";
+      aboutContainer.className = "background";
     }
     
     else {
-        //aboutContainer.innerText = "";
-        aboutText.className = "about-hide";
-        aboutContainer.className = "";
+      aboutText.className = "about-hide";
+      aboutContainer.className = "";
     }
+  }
 }
 
 /* Shows pictures when the "Pictures" button is pressed. */
 function showPics() {
-    const imgs = ["ucla1.JPG", "ucla2.jpg.JPG", "book.JPG", "harrypotter.JPG"]
-    const srcBase = "https://8080-0ba309ed-2f3c-4b55-83b6-7741ff94bec3.us-west1.cloudshell.dev/base"
-    const picPath = "https://8080-0ba309ed-2f3c-4b55-83b6-7741ff94bec3.us-west1.cloudshell.dev/images/"
-    
-    // Calculate a random index for the img array 
-    const randInt = (Math.floor(Math.random() * imgs.length));
-    const randImg = imgs[randInt];
-    
-    const div = document.getElementById('picSpace');
-    const imgArr = div.getElementsByTagName('img');
+  const imgs = ["ucla1.JPG", "ucla2.JPG", "book.JPG", "harrypotter.JPG"]
 
-    if (imgArr.length > 0) {
-        picContainer = imgArr[0];
-    }
+  // Calculate a random index for the img array 
+  const randInt = (Math.floor(Math.random() * imgs.length));
+  const randImg = imgs[randInt];
+    
+  const div = document.getElementById('picSpace');
+  const imgArr = div.getElementsByTagName('img');
 
+  let picContainer;
+
+  if (imgArr.length > 0) {
+    picContainer = imgArr[0];
+  }
+
+  if (picContainer) {
     // If pictures pressed, either remove / show picture depending on what is already there
-    if (picContainer.src === srcBase) {
-        picContainer.src = picPath + randImg;
-        picContainer.className = "displayImage";
-        div.className = "background";
+    if (picContainer.className === "image-hide") {
+      picContainer.src = "/images/" + randImg;
+      picContainer.className = "image-show";
+      div.className = "background";
     }
     else {
-        picContainer.src = srcBase;
-        picContainer.className = "image";
-        div.className = "";
+      picContainer.className = "image-hide";
+      div.className = "";
     }
-    
+  }
 }

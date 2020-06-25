@@ -1,9 +1,9 @@
 .site-background {
-  background-color:#94B4CB;
+  background-color: #94B4CB;
+  font-family: monospace;
 }
 
 .header {
-  font-family: monospace;
   font-size: 300%;
   margin-left: 30%;
   margin-top: 20%;
@@ -26,45 +26,40 @@ li a {
   border-bottom-style: solid;
   display: block;
   color: black;
-  font-family: monospace;
   font-size: 120%;
   font-style: italic;
-  padding: 24px 24px;
+  padding: 24px;
   text-align: center;
   text-decoration: none;
 }
 
 li a:hover {
   background-color: #89C8D2;
+  cursor: pointer;
 }
 
 .background {
-  background-color:#89C8D2;
-  font-family: monospace;
+  background-color: #89C8D2;
   margin-left: 29.75%;
   margin-right: 43%;
   margin-top: 7%;
-  padding-bottom: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 20px;
+  padding: 20px;
 }
 
-.image {
+.image-hide {
   display: none;
-  width: 650px;
 }
 
-.displayImage {
+.image-show {
   display: block;
   width: 650px;
 }
 
 .about-hide {
-    display: none;
+  display: none;
 }
 
 .about-show {
-    display: block;
+  display: block;
 }
 
