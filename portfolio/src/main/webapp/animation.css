@@ -1,0 +1,130 @@
+.sky {
+  background-image: url("/images/stars.jpg");
+  font-family: monospace;
+  transform: rotate(45deg);
+}
+
+/* 'Shooting' straight line part of shooting star */
+.star {
+  animation: shoot 5000ms ease-in-out infinite, move 5000ms ease-in-out infinite;
+  background: linear-gradient(-45deg, #5f91ff, rgba(0, 0, 255, 0));
+  filter: drop-shadow(0 0 6px #699bff);
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+}
+
+/* First half of star design at end of shooting star */ 
+.star::before, .star::after {
+  animation: star 5000ms ease-in-out infinite;
+  background: linear-gradient(-45deg, rgba(0, 0, 255, 0), #5f91ff, rgba(0, 0, 255, 0));
+  content: '';
+  filter: drop-shadow(0 0 6px #699bff);
+  height: 2px;
+  position: absolute;
+  right: 2px;
+  transform: translateX(50%) rotateZ(-45deg);
+}
+
+/* Second half of the star design at end of shooting star */
+.star::after {
+  filter: drop-shadow(0 0 6px #699bff);
+  transform: translateX(50%) rotateZ(45deg);
+}
+
+.star:nth-child(1) {
+  animation-delay: 650ms;
+  left: calc(50% - 190px);
+  top: calc(50% - -200px);
+}
+
+.star:nth-child(1)::before, .star:nth-child(1)::after {
+  animation-delay: 650ms;
+}
+
+.star:nth-child(2) {
+  animation-delay: 700ms;
+  left: calc(50% - 800px);
+  top: calc(50% - -800px);
+}
+
+.star:nth-child(2)::before, .star:nth-child(2)::after {
+  animation-delay: 700ms;
+}
+
+.star:nth-child(3) {
+  animation-delay: 4000ms;
+  left: calc(50% - 600px);
+  top: calc(50% - -600px);
+}
+
+.star:nth-child(3)::before, .star:nth-child(3)::after {
+  animation-delay: 4000ms;
+}
+
+.star:nth-child(4) {
+  animation-delay: 4700ms;
+  left: calc(50% - -600px);
+  top: calc(50% - -100px);
+}
+
+.star:nth-child(4)::before, .star:nth-child(4)::after {
+  animation-delay: 4700ms;
+}
+
+/* Part of the star that 'shoots' out */
+@keyframes shoot {
+  0%, 100% {
+    width: 0px;
+  }
+  30% {
+    width: 400px;
+  }
+}
+
+/* Star appears like it's moving */
+@keyframes move {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(800px);
+  }
+}
+
+/* Star shape at the end of shooting star */
+@keyframes star {
+  0%, 100% {
+    width: 0px;
+  }
+  50% {
+    width: 30px;
+  }
+}
+
+/* Button Styles */
+ul {
+  list-style-type: none;
+  margin-right: 100px;
+  margin-top: 100px;
+  transform: rotate(-45deg);
+}
+
+li a {
+  background-color: #9FA0C3;
+  border-bottom-color: #5f91ff;
+  border-bottom-style: solid;
+  color: black;
+  font-size: 120%;
+  font-style: italic;
+  padding: 24px;
+  text-align: center;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #89C8D2;
+  cursor: pointer;
+}
+
