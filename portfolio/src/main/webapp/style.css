@@ -24,8 +24,8 @@ li a {
   background-color: #9FA0C3;
   border-bottom-color: #3C617C;
   border-bottom-style: solid;
-  display: block;
   color: black;
+  display: block;
   font-size: 120%;
   font-style: italic;
   padding: 24px;
@@ -62,4 +62,5 @@ li a:hover {
 .about-show {
   display: block;
 }
+
 

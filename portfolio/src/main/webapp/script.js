@@ -15,22 +15,15 @@
 /* Shows about text when the "About" button is pressed. */
 function showAbout () {
   const aboutContainer = document.getElementById('aboutSpace');
-  aboutArr = aboutContainer.getElementsByTagName('p');
-
-  let aboutText; 
+  const aboutArr = aboutContainer.getElementsByTagName('p');
 
   if (aboutArr.length > 0) {
-    aboutText = aboutContainer.getElementsByTagName('p')[0];
-  }
-
-  if (aboutText) {
+    const aboutText = aboutContainer.getElementsByTagName('p')[0];
     // Change the text in the aboutSpace element 
     if (aboutText.className === "about-hide") {
       aboutText.className = "about-show";
       aboutContainer.className = "background";
-    }
-    
-    else {
+    } else {
       aboutText.className = "about-hide";
       aboutContainer.className = "";
     }
@@ -48,20 +41,14 @@ function showPics() {
   const div = document.getElementById('picSpace');
   const imgArr = div.getElementsByTagName('img');
 
-  let picContainer;
-
   if (imgArr.length > 0) {
-    picContainer = imgArr[0];
-  }
-
-  if (picContainer) {
+    const picContainer = imgArr[0];
     // If pictures pressed, either remove / show picture depending on what is already there
     if (picContainer.className === "image-hide") {
       picContainer.src = "/images/" + randImg;
       picContainer.className = "image-show";
       div.className = "background";
-    }
-    else {
+    } else {
       picContainer.className = "image-hide";
       div.className = "";
     }
