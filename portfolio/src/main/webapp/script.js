@@ -14,20 +14,17 @@
 
 /* Shows about text when the "About" button is pressed. */
 function showAbout () {
-  const aboutContainer = document.getElementById('aboutSpace');
-  const aboutArr = aboutContainer.getElementsByTagName('p');
+  const aboutText = document.getElementById('aboutSpace');
 
-  if (aboutArr.length > 0) {
-    const aboutText = aboutContainer.getElementsByTagName('p')[0];
-    // Change the text in the aboutSpace element 
-    if (aboutText.className === "about-hide") {
-      aboutText.className = "about-show";
-      aboutContainer.className = "background";
-    } else {
-      aboutText.className = "about-hide";
-      aboutContainer.className = "";
+  if (aboutText.classList.contains("about-hide")) {
+    aboutText.classList.remove("about-hide");
+    aboutText.classList.add("about-show");
+    aboutText.classList.add("background");
+  } else {
+    aboutText.classList.remove("about-show");
+    aboutText.classList.remove("background");
+    aboutText.classList.add("about-hide");
     }
-  }
 }
 
 /* Shows pictures when the "Pictures" button is pressed. */
@@ -38,19 +35,16 @@ function showPics() {
   const randInt = (Math.floor(Math.random() * imgs.length));
   const randImg = imgs[randInt];
     
-  const div = document.getElementById('picSpace');
-  const imgArr = div.getElementsByTagName('img');
+  const img = document.getElementById('picSpace');
 
-  if (imgArr.length > 0) {
-    const picContainer = imgArr[0];
-    // If pictures pressed, either remove / show picture depending on what is already there
-    if (picContainer.className === "image-hide") {
-      picContainer.src = "/images/" + randImg;
-      picContainer.className = "image-show";
-      div.className = "background";
-    } else {
-      picContainer.className = "image-hide";
-      div.className = "";
-    }
+  if (img.classList.contains("image-hide")) {
+    img.classList.remove("image-hide");
+    img.classList.add("image-show");
+    img.classList.add("background");
+    img.src = "/images/" + randImg;
+  } else {
+    img.classList.remove("image-show");
+    img.classList.remove("background");
+    img.classList.add("image-hide");
   }
 }
