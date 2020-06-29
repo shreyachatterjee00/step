@@ -12,17 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * Adds a random greeting to the page.
- */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+/* Shows about text when the "About" button is pressed. */
+function showAbout () {
+  const aboutText = document.getElementById('aboutSpace');
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+  if (aboutText.classList.contains("about-hide")) {
+    aboutText.classList.remove("about-hide");
+    aboutText.classList.add("about-show");
+    aboutText.classList.add("background");
+  } else {
+    aboutText.classList.remove("about-show");
+    aboutText.classList.remove("background");
+    aboutText.classList.add("about-hide");
+    }
+}
 
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+/* Shows pictures when the "Pictures" button is pressed. */
+function showPics() {
+  const imgs = ["ucla1.JPG", "ucla2.JPG", "book.JPG", "harrypotter.JPG"]
+
+  // Calculate a random index for the img array 
+  const randInt = (Math.floor(Math.random() * imgs.length));
+  const randImg = imgs[randInt];
+    
+  const img = document.getElementById('picSpace');
+
+  if (img.classList.contains("image-hide")) {
+    img.classList.remove("image-hide");
+    img.classList.add("image-show");
+    img.classList.add("background");
+    img.src = "/images/" + randImg;
+  } else {
+    img.classList.remove("image-show");
+    img.classList.remove("background");
+    img.classList.add("image-hide");
+  }
 }
