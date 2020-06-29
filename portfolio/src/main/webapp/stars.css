@@ -113,8 +113,7 @@ ul {
 
 li a {
   background-color: #9FA0C3;
-  border-bottom-color: #5f91ff;
-  border-bottom-style: solid;
+  border-bottom: 1px solid #5f91ff;
   color: black;
   font-size: 120%;
   font-style: italic;
