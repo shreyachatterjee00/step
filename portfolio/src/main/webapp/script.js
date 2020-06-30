@@ -49,10 +49,14 @@ function showPics() {
   }
 }
 
-/* Async function that gets quote from servlet page and renders it to home page of portfolio. */
-async function getServletData() {
-  const response = await fetch('/data');
-  const message = await response.text();
-  document.getElementById('message-container').innerText = message;
+/* Gets array list of messages from servlet, converts to JSON, and displays it on home page. */
+function getJSONMessages() {
+  fetch('/data').then(response => response.json()).then((messages) => {
+
+    const msgElement = document.getElementById('message-container');
+    msgElement.innerHTML = '';
+    msgElement.innerText = messages[0] + '\n' + messages[1] + '\n' + messages[2];
+
+  });
 }
 
