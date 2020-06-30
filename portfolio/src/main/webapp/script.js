@@ -48,3 +48,11 @@ function showPics() {
     img.classList.add("image-hide");
   }
 }
+
+/* Async function that gets quote from servlet page and renders it to home page of portfolio. */
+async function getRandomQuoteUsingAsyncAwait() {
+  const response = await fetch('/data');
+  const message = await response.text();
+  document.getElementById('message-container').innerText = message;
+}
+
