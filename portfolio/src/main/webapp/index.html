@@ -6,11 +6,11 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body class="site-background">
+  <body class="site-background" onload="getHelloUsingAsyncAwait()">
     <div class="header">
       <h1>Hi, I'm Shreya.</h1>
     </div>
-    <ul>
+    <ul> 
       <li><a href="stars.html">Stars!</a></li>
       <li><a onclick="showAbout()">About Me</a></li>
       <li><a onclick="showPics()">Random Picture from my Life!</a></li>
@@ -22,5 +22,6 @@
       and playing Stardew Valley (turns out video games are a great way to stay connected to friends during this time)!
     </p>
     <img id="picSpace" class="image-hide" src=""/>
+    <div id="message-container" class="message"></div>
   </body>
 </html>
