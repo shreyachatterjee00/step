@@ -50,7 +50,7 @@ function showPics() {
 }
 
 /* Async function that gets quote from servlet page and renders it to home page of portfolio. */
-async function getHelloUsingAsyncAwait() {
+async function getServletData() {
   const response = await fetch('/data');
   const message = await response.text();
   document.getElementById('message-container').innerText = message;
