@@ -62,11 +62,19 @@ li a:hover {
   display: block;
 }
 
-.message {
-    color: white;
-    font-family: monospace;
-    margin-left: 1550px;
+.bucket-list {
+  background-color: #9FA0C3;
+  border-bottom: 2px solid #5f91ff;
+  margin-left: 30%;
+  margin-right: 60%;
+  margin-top: 5%;
+  padding: 20px;
 }
 
+.list-header {
+  color: black;
+  font-size: 120%;
+  font-style: italic;
+}
 
 

@@ -21,18 +21,31 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import com.google.gson.Gson;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  ArrayList<String> messages = new ArrayList<String>();
   private static final String COMMENT_PARAMETER = "comment-area";
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String comment = request.getParameter(COMMENT_PARAMETER);
-    messages.add(0, comment);
+    Long timestamp = System.currentTimeMillis();
+
+    Entity bucketListEntity = new Entity("listItem");
+    bucketListEntity.setProperty("item", comment);
+    bucketListEntity.setProperty("time", timestamp);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(bucketListEntity);
+
     response.setContentType("text/html;");
     response.getWriter().println(comment);
     response.sendRedirect("/index.html");
@@ -40,14 +53,25 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String json = convertMsgToJSON(messages);
+    Query query = new Query("listItem").addSort("time", SortDirection.ASCENDING);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    ArrayList<String> buckList = new ArrayList<String>();
+    for (Entity entity : results.asIterable()) {
+      String item = (String) entity.getProperty("item");
+      buckList.add(item);
+    }
+
+    String json = convertMsgToJSON(buckList);
     response.setContentType("application/json;");
     response.getWriter().println(json);
   }
  
-  private String convertMsgToJSON(ArrayList<String> messagesParam) {
+  private String convertMsgToJSON(ArrayList<String> listParam) {
     Gson gson = new Gson();
-    String json = gson.toJson(messagesParam);
+    String json = gson.toJson(listParam);
     return json;
   }
 }
