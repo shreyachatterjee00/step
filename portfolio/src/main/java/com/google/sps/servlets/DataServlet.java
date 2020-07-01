@@ -27,10 +27,11 @@ import com.google.gson.Gson;
 public class DataServlet extends HttpServlet {
 
   ArrayList<String> messages = new ArrayList<String>();
+  private static final String COMMENT_PARAMETER = "comment-area";
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String comment = request.getParameter("comment-area");
+    String comment = request.getParameter(COMMENT_PARAMETER);
     messages.add(0, comment);
     response.setContentType("text/html;");
     response.getWriter().println(comment);

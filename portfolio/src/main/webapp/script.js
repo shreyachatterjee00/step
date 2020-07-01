@@ -54,7 +54,6 @@ function getJSONMessages() {
   fetch('/data').then(response => response.json()).then((messages) => {
     const msgElement = document.getElementById('message-container');
     msgElement.innerHTML = '';
-    console.log(messages);
     if (messages.length === 0) {
       msgElement.innerText = "";
     } else {
