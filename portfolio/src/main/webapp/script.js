@@ -54,17 +54,12 @@ function getJSONMessages() {
   fetch('/data').then(response => response.json()).then((list) => {
     const listElement = document.getElementById('list-container');
     listElement.innerHTML = '';
-    var bucketList = "";
+    let bucketList = "";
 
-    if (list.length === 0) {
-      bucketList = "";
-    } else {
-      for (i = 0; i < list.length; i++) {
-        bucketList += (i + 1) + ": " + list[i]+ '\n';
-      }
+    for (i = 0; i < list.length; i++) {
+      bucketList += (i + 1) + ": " + list[i] + '\n';
     }
     listElement.innerText = bucketList;
-
   });
 }
 

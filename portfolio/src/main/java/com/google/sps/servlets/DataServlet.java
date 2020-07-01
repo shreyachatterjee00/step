@@ -33,17 +33,21 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 public class DataServlet extends HttpServlet {
 
   private static final String COMMENT_PARAMETER = "comment-area";
+  private static final String LIST_ITEM = "listItem";
+  private static final String TIME = "time";
+  private static final String ITEM = "item";
+  private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String comment = request.getParameter(COMMENT_PARAMETER);
     Long timestamp = System.currentTimeMillis();
 
-    Entity bucketListEntity = new Entity("listItem");
-    bucketListEntity.setProperty("item", comment);
-    bucketListEntity.setProperty("time", timestamp);
+    Entity bucketListEntity = new Entity(LIST_ITEM);
+    bucketListEntity.setProperty(ITEM, comment);
+    bucketListEntity.setProperty(TIME, timestamp);
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    //DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(bucketListEntity);
 
     response.setContentType("text/html;");
@@ -53,14 +57,14 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("listItem").addSort("time", SortDirection.ASCENDING);
+    Query query = new Query(LIST_ITEM).addSort(TIME, SortDirection.ASCENDING);
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    //DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
     ArrayList<String> buckList = new ArrayList<String>();
     for (Entity entity : results.asIterable()) {
-      String item = (String) entity.getProperty("item");
+      String item = (String) entity.getProperty(ITEM);
       buckList.add(item);
     }
 
