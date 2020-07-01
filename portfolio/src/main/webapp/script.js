@@ -50,16 +50,28 @@ function showPics() {
 }
 
 /* Gets array list of messages from servlet, converts to JSON, and displays it on home page. */
-function getJSONMessages() {
+function getBucketList() {
   fetch('/data').then(response => response.json()).then((list) => {
     const listElement = document.getElementById('list-container');
     listElement.innerHTML = '';
     let bucketList = "";
 
+    // Display elements in a numerical list
+    let count = 1;
     for (i = 0; i < list.length; i++) {
-      bucketList += (i + 1) + ": " + list[i] + '\n';
+      if (list[i] === "") {
+        bucketList += "";
+      } 
+      else {
+        bucketList += count + ": " + list[i] + '\n';
+        count++;
+      }
     }
     listElement.innerText = bucketList;
   });
 }
 
+/* Delete list elements in the bucket list */
+function deleteData() {
+    fetch('/delete-data', {method: 'POST'});
+}

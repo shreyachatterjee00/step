@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body class="site-background" onload="getJSONMessages()">
+  <body class="site-background" onload="getBucketList()">
     <div class="header">
       <h1>Hi, I'm Shreya.</h1>
     </div>
@@ -28,6 +28,7 @@
         <textarea name="comment-area" placeholder="Bucket List Item"></textarea>
         <br></br>
         <input type="submit" value="Add"></input>
+        <input type="submit" value="Delete All" onclick="deleteData()"></input>
       </form>
       <br></br>
       <div id="list-container"></div>
