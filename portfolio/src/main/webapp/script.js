@@ -57,7 +57,7 @@ function getJSONMessages() {
     if (messages.length === 0) {
       msgElement.innerText = "";
     } else {
-      msgElement.innerText = messages[0];
+      msgElement.innerText = messages[messages.length - 1];
     }
   });
 }
