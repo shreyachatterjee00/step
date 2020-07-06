@@ -56,7 +56,7 @@ function getJSONMessages() {
     listElement.innerHTML = '';
     let bucketList = "";
 
-    for (i = 0; i < list.length; i++) {
+    for (let i = 0; i < list.length; i++) {
       bucketList += (i + 1) + ": " + list[i] + '\n';
     }
     listElement.innerText = bucketList;
