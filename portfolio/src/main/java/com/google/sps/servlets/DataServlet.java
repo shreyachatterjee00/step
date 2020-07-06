@@ -27,11 +27,15 @@ import com.google.gson.Gson;
 public class DataServlet extends HttpServlet {
 
   ArrayList<String> messages = new ArrayList<String>();
-  
-  public DataServlet () {
-    messages.add("The sun is out today!");
-    messages.add("I just got new curtains.");
-    messages.add("Woo hoo!");
+  private static final String COMMENT_PARAMETER = "comment-area";
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String comment = request.getParameter(COMMENT_PARAMETER);
+    messages.add(comment);
+    response.setContentType("text/html;");
+    response.getWriter().println(comment);
+    response.sendRedirect("/index.html");
   }
 
   @Override

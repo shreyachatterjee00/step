@@ -22,6 +22,14 @@
       and playing Stardew Valley (turns out video games are a great way to stay connected to friends during this time)!
     </p>
     <img id="picSpace" class="image-hide" src=""/>
-    <div id="message-container" class="message"></div>
+    <div class="message">
+      <form action="/data" method="POST">
+        <textarea name="comment-area" placeholder="Comment Something!"></textarea>
+        <br></br>
+        <input type="submit" value="Display My Comment"></input>
+      </form>
+      <br></br>
+      <div id="message-container"></div>
+    </div>
   </body>
 </html>
