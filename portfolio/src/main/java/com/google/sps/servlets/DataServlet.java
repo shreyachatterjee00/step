@@ -47,7 +47,6 @@ public class DataServlet extends HttpServlet {
     bucketListEntity.setProperty(ITEM, comment);
     bucketListEntity.setProperty(TIME, timestamp);
 
-    //DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(bucketListEntity);
 
     response.setContentType("text/html;");
@@ -59,7 +58,6 @@ public class DataServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query(LIST_ITEM).addSort(TIME, SortDirection.ASCENDING);
 
-    //DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
     ArrayList<String> buckList = new ArrayList<String>();
