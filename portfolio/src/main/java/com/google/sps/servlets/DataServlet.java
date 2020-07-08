@@ -48,7 +48,7 @@ public class DataServlet extends HttpServlet {
     bucketListEntity.setProperty(TIME, timestamp);
 
     datastore.put(bucketListEntity);
-
+    
     response.setContentType("text/html;");
     response.getWriter().println(comment);
     response.sendRedirect("/index.html");

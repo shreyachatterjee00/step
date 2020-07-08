@@ -56,16 +56,8 @@ function getBucketList() {
     listElement.innerHTML = '';
     let bucketList = "";
 
-    // Display elements in a numerical list
-    let count = 1;
-    for (i = 0; i < list.length; i++) {
-      if (list[i] === "") {
-        bucketList += "";
-      } 
-      else {
-        bucketList += count + ": " + list[i] + '\n';
-        count++;
-      }
+    for (let i = 0; i < list.length; i++) {
+      bucketList += (i + 1) + ": " + list[i] + '\n';
     }
     listElement.innerText = bucketList;
   });
