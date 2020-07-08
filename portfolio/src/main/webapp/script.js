@@ -55,12 +55,12 @@ function getBucketList() {
     const listElement = document.getElementById('list-container');
     listElement.innerHTML = '';
 
-    listElement.appendChild(createListElement(list));
+    listElement.appendChild(createOrderedList(list));
   });
 }
 
 /* Creates a <ol> ordered list, and creates inner <li> tags for items. */
-function createListElement(array) {
+function createOrderedList(array) {
   let list = document.createElement('ol');
 
   for (let i = 0; i < array.length; i++) {
