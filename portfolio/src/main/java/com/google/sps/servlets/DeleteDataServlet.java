@@ -31,11 +31,12 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.Constants;
 
 /** Servlet that deletes bucket list content*/
 @WebServlet("/delete-data")
 public class DeleteDataServlet extends HttpServlet {
-    
+
   private static final String ENTITY_KIND = "listItem";
   private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
