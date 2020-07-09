@@ -27,7 +27,6 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.Constants;
 
 
 /** Servlet that returns bucket list content */
@@ -35,7 +34,7 @@ import com.google.Constants;
 public class DataServlet extends HttpServlet {
 
   private static final String COMMENT_PARAMETER = "comment-area";
-  private static final String ENTITY_KIND = "listItem";
+  //private static final String ENTITY_KIND = "listItem";
   private static final String TIME = "time";
   private static final String ITEM = "item";
   private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -45,7 +44,7 @@ public class DataServlet extends HttpServlet {
     String comment = request.getParameter(COMMENT_PARAMETER);
     Long timestamp = System.currentTimeMillis();
 
-    Entity bucketListEntity = new Entity(ENTITY_KIND);
+    Entity bucketListEntity = new Entity(Constants.ENTITY_KIND);
     bucketListEntity.setProperty(ITEM, comment);
     bucketListEntity.setProperty(TIME, timestamp);
 
@@ -58,7 +57,7 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query(ENTITY_KIND).addSort(TIME, SortDirection.ASCENDING);
+    Query query = new Query(Constants.ENTITY_KIND).addSort(TIME, SortDirection.ASCENDING);
 
     PreparedQuery results = datastore.prepare(query);
 

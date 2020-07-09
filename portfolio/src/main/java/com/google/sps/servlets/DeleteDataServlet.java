@@ -31,19 +31,18 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.Constants;
 
 /** Servlet that deletes bucket list content*/
 @WebServlet("/delete-data")
 public class DeleteDataServlet extends HttpServlet {
 
-  private static final String ENTITY_KIND = "listItem";
+  //private static final String ENTITY_KIND = "listItem";
   private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
   @Override 
   /* Get all elements in the entity, get keys for each, delete all */
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query(ENTITY_KIND);
+    Query query = new Query(Constants.ENTITY_KIND);
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
