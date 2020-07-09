@@ -34,7 +34,6 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 public class DataServlet extends HttpServlet {
 
   private static final String COMMENT_PARAMETER = "comment-area";
-  //private static final String ENTITY_KIND = "listItem";
   private static final String TIME = "time";
   private static final String ITEM = "item";
   private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

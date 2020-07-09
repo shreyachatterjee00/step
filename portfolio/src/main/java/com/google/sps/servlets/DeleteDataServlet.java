@@ -36,7 +36,6 @@ import com.google.appengine.api.datastore.KeyFactory;
 @WebServlet("/delete-data")
 public class DeleteDataServlet extends HttpServlet {
 
-  //private static final String ENTITY_KIND = "listItem";
   private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
   @Override 
