@@ -33,38 +33,23 @@ import java.util.ArrayList;
 @WebServlet("/sentiment")
 public class SentimentAnalysisServlet extends HttpServlet {
 
-  public final static String SENTIMENT_AREA = "sentiment-comment";
-  String message;
-  String score;
+  private final static String SENTIMENT_AREA = "sentiment-comment";
 
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    message = request.getParameter(SENTIMENT_AREA);
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    String message = request.getParameter(SENTIMENT_AREA);
 
     // Use Language API to get Sentiment Score
     Document doc = Document.newBuilder().setContent(message).setType(Document.Type.PLAIN_TEXT).build();
     LanguageServiceClient languageService = LanguageServiceClient.create();
     Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
-    float tempScore = sentiment.getScore();
-    score = Float.toString(tempScore);
+    String score = Float.toString(sentiment.getScore());
     languageService.close();
 
-    response.setContentType("text/html");
-    response.sendRedirect("/index.html");
-    response.getWriter().println(score);
-  }
-
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String json = convertMsgToJSON(score);
+    String json = new Gson().toJson(score);
     response.setContentType("application/json;");
     response.getWriter().println(json);
-  }
- 
-  private String convertMsgToJSON(String msg) {
-    Gson gson = new Gson();
-    String json = gson.toJson(msg);
-    return json;
   }
 
 }

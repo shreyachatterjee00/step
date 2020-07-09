@@ -33,40 +33,26 @@ import java.util.ArrayList;
 @WebServlet("/entity")
 public class EntityExtractionServlet extends HttpServlet {
 
-  public final static String ENTITY_AREA = "entity-comment";
-  String message;
+  private final static String ENTITY_PARAM = "entity-comment";
   ArrayList<String> entities = new ArrayList<String>();
 
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    message = request.getParameter(ENTITY_AREA);
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String message = request.getParameter(ENTITY_PARAM);
 
     // Use Language API to get list of entities of message
     LanguageServiceClient languageService = LanguageServiceClient.create();
     Document doc = Document.newBuilder().setContent(message).setType(Type.PLAIN_TEXT).build();
-    AnalyzeEntitiesRequest analyze = AnalyzeEntitiesRequest.newBuilder().setDocument(doc).setEncodingType(EncodingType.UTF16).build();
-    AnalyzeEntitiesResponse list = languageService.analyzeEntities(analyze);
+    AnalyzeEntitiesRequest analyzeRequest = AnalyzeEntitiesRequest.newBuilder().setDocument(doc).setEncodingType(EncodingType.UTF16).build();
+    AnalyzeEntitiesResponse listResponse = languageService.analyzeEntities(analyzeRequest);
 
-    for (Entity entity : list.getEntitiesList()) {
+    for (Entity entity : listResponse.getEntitiesList()) {
       entities.add(entity.getName());
-      response.getWriter().printf("Entity: %s", entity.getName());
     }
 
-    response.setContentType("text/html");
-    response.sendRedirect("/index.html");
-  }
-
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String json = convertMsgToJSON(entities);
+    String json = new Gson().toJson(entities);
     response.setContentType("application/json;");
     response.getWriter().println(json);
-  }
- 
-  private String convertMsgToJSON(ArrayList<String> ents) {
-    Gson gson = new Gson();
-    String json = gson.toJson(ents);
-    return json;
   }
 
 }
