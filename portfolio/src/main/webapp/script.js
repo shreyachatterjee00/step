@@ -61,11 +61,6 @@ function getBucketList() {
     }
     listElement.innerText = bucketList;
   });
-  
-  //onload this function and doSentAnalysis() and doEntExtraction()
-  doSentAnalysis();
-  doEntExtraction();
-
 }
 
 /* Delete list elements in the bucket list */
@@ -75,18 +70,23 @@ function deleteData() {
 
 /* Fetch sentiment score of user's message and display it. */
 function doSentAnalysis() {
-  fetch('/sentiment').then(response => response.json()).then((sentimentScore) => {
+  const sentComm = document.getElementById("sent-id").value;
+
+  fetch('/sentiment?sentiment-comment=' + sentComm).then(response => response.json()).then((sentimentScore) => {
     const sentElement = document.getElementById('sentiment-container');
     sentElement.innerHTML = '';
+    
     if (sentimentScore) {
-      sentElement.innerText = "Sentiment Analysis score is: " + sentimentScore + ".";
+      sentElement.innerText = "Sentiment Analysis score is: " + sentimentScore;
     }
   });
 }
 
 /* Fetch entities in user's message and display it. */
 function doEntExtraction() {
-  fetch('/entity').then(response => response.json()).then((entities) => {
+  const entEx = document.getElementById("ent-id").value;
+
+  fetch('/entity?entity-comment=' + entEx).then(response => response.json()).then((entities) => {
     const entElement = document.getElementById('entity-container');
     entElement.innerHTML = '';
     let entString = "";
