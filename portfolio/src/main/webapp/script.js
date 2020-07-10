@@ -50,16 +50,30 @@ function showPics() {
 }
 
 /* Gets array list of messages from servlet, converts to JSON, and displays it on home page. */
-function getJSONMessages() {
+function getBucketList() {
   fetch('/data').then(response => response.json()).then((list) => {
     const listElement = document.getElementById('list-container');
     listElement.innerHTML = '';
-    let bucketList = "";
 
-    for (let i = 0; i < list.length; i++) {
-      bucketList += (i + 1) + ": " + list[i] + '\n';
-    }
-    listElement.innerText = bucketList;
+    listElement.appendChild(createOrderedList(list));
   });
 }
 
+/* Creates a <ol> ordered list, and creates inner <li> tags for items. */
+function createOrderedList(array) {
+  let list = document.createElement('ol');
+
+  for (let i = 0; i < array.length; i++) {
+    if (array[i]) {
+      const liElement = document.createElement('li');
+      liElement.innerText = array[i];
+      list.appendChild(liElement);
+    }
+  }
+    return list;
+}
+
+/* Delete list elements in the bucket list */
+function deleteData() {
+    fetch('/delete-data', {method: 'POST'});
+}
