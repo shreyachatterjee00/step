@@ -33,7 +33,6 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 public class DataServlet extends HttpServlet {
 
   private static final String COMMENT_PARAMETER = "comment-area";
-  private static final String LIST_ITEM = "listItem";
   private static final String TIME = "time";
   private static final String ITEM = "item";
   private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -43,7 +42,7 @@ public class DataServlet extends HttpServlet {
     String comment = request.getParameter(COMMENT_PARAMETER);
     Long timestamp = System.currentTimeMillis();
 
-    Entity bucketListEntity = new Entity(LIST_ITEM);
+    Entity bucketListEntity = new Entity(Constants.ENTITY_KIND);
     bucketListEntity.setProperty(ITEM, comment);
     bucketListEntity.setProperty(TIME, timestamp);
 
@@ -56,7 +55,7 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query(LIST_ITEM).addSort(TIME, SortDirection.ASCENDING);
+    Query query = new Query(Constants.ENTITY_KIND).addSort(TIME, SortDirection.ASCENDING);
 
     PreparedQuery results = datastore.prepare(query);
 
