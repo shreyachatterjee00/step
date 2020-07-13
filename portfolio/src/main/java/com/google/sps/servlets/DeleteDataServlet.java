@@ -34,13 +34,14 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 /** Servlet that deletes bucket list content*/
 @WebServlet("/delete-data")
-public class DeleteDataServlet extends HttpServlet {
+public class DeleteDataServlet extends HttpServlet 
 
   private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
   @Override 
   /* Get all elements in the entity, get keys for each, delete all */
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
     Query query = new Query(Constants.ENTITY_KIND);
     PreparedQuery results = datastore.prepare(query);
 

@@ -78,4 +78,31 @@ li a:hover {
   font-style: italic;
 }
 
+.libraries {
+  background-color: #9FA0C3;
+  border-bottom: 2px solid #5f91ff;
+  margin-left: 41.7%;
+  margin-right: 37.8%;
+  margin-top: -8%;
+  padding: 20px
+}
+
+.sentiment {
+  background-color: #9FA0C3;
+  border-bottom: 2px solid #5f91ff;
+  margin-left: 41.7%;
+  margin-right: 49%;
+  margin-top: 1%;
+  padding: 20px
+}
+
+.entity {
+  background-color: #9FA0C3;
+  border-bottom: 2px solid #5f91ff;
+  margin-left: 53%;
+  margin-right: 37.8%;
+  margin-top: -13.25%;
+  padding: 20px;
+}
+
 

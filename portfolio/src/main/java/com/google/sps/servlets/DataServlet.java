@@ -28,7 +28,6 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 
-
 /** Servlet that returns bucket list content */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {

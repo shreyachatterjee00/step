@@ -33,5 +33,26 @@
       <br></br>
       <div id="list-container"></div>
     </div>
+    <div class="libraries">
+      <p class="list-header">Sentiment Score & Entity Extraction</p>
+      <p>The <strong> Natural Language API </strong> consists of Machine Learning models that understand and extract features of sentences. Very interesting stuff for the Linguist in me!</p>
+    </div>
+    <div class="sentiment">
+      <p>The ML models in the API generate a sentiment score of a sentence from -1 to 1, depending on how positive or negative the message is. Find out the score for your sentence here!</p>
+      <textarea name="sentiment-comment" id="sent-id" aria-label="Message for sentiment score" placeholder="Enter a Sentence"></textarea>
+      <br></br>
+      <input type="submit" value="Get Score" onclick="doSentAnalysis()"></input>
+      <br></br>
+      <div id="sentiment-container"></div>
+    </div>
+    <br></br>
+    <div class="entity">
+      <p>The models can also extract 'entities' of sentences, such as people, organizations, etc. Get a list of entities in your message here!</p>
+      <textarea name="entity-comment" id ="ent-id" aria-label="Message for entity extraction" placeholder="Enter a Sentence"></textarea>
+      <br></br>
+      <input type="submit" value="Get Entities" onclick="doEntExtraction()"></input>
+      <br></br>
+      <div id="entity-container"></div>
+    </div>
   </body>
 </html>
