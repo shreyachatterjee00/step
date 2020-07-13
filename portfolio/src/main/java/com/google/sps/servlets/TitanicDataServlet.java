@@ -16,48 +16,41 @@ public class TitanicDataServlet extends HttpServlet {
 
   private LinkedHashMap<String, Double> titanicSurvivors = new LinkedHashMap<>();
 
+  private static final int FIRST_CLASS = 1;
+  private static final int SECOND_CLASS = 2;
+  private static final int THIRD_CLASS = 3;
+
+  private static final int FIRST_COLUMN_SURVIVED = 0;
+  private static final int SECOND_COLUMN_CLASS = 1;
+
   @Override
   public void init() {
-    Double firstPercent = 0.0;
-    Double secondPercent = 0.0;
-    Double thirdPercent = 0.0;
+    TitanicStats classOneRate = new TitanicStats();
+    TitanicStats classTwoRate = new TitanicStats();
+    TitanicStats classThreeRate = new TitanicStats();
 
-    Double firstTotal = 0.0;
-    Double secondTotal = 0.0;
-    Double thirdTotal = 0.0;
+    final Scanner scanner = new Scanner(getServletContext().getResourceAsStream(
+      "/WEB-INF/train.csv"));
 
-    Double firstSurvived = 0.0;
-    Double secondSurvived = 0.0;
-    Double thirdSurvived = 0.0;
-
-    Scanner scanner = new Scanner(getServletContext().getResourceAsStream(
-        "/WEB-INF/train.csv"));
     while (scanner.hasNextLine()) {
       String line = scanner.nextLine();
       String[] cells = line.split(",");
 
-      Integer survived = Integer.valueOf(cells[0]);
-      Integer shipClass = Integer.valueOf(cells[1]);
+      Integer passengerSurvived = Integer.valueOf(cells[FIRST_COLUMN_SURVIVED]);
+      Integer shipClass = Integer.valueOf(cells[SECOND_COLUMN_CLASS]);
 
-      switch(shipClass) {
-          case 1: 
-            firstSurvived += survived;
-            firstTotal += 1;
-          case 2: 
-            secondSurvived += survived;
-            secondTotal += 1;
-          case 3: 
-            thirdSurvived += survived;
-            thirdTotal += 1;
+      switch (shipClass) {
+        case FIRST_CLASS: 
+          classOneRate.addPassenger(passengerSurvived);
+        case SECOND_CLASS: 
+          classTwoRate.addPassenger(passengerSurvived);
+        case THIRD_CLASS: 
+          classThreeRate.addPassenger(passengerSurvived);
       }
 
-      firstPercent = firstSurvived / firstTotal;
-      secondPercent = secondSurvived / secondTotal;
-      thirdPercent = thirdSurvived / thirdTotal;
-
-      titanicSurvivors.put("First Class", firstPercent);
-      titanicSurvivors.put("Second Class", secondPercent);
-      titanicSurvivors.put("Third Class", thirdPercent);
+      titanicSurvivors.put("First Class", classOneRate.getSurvivorRate());
+      titanicSurvivors.put("Second Class", classTwoRate.getSurvivorRate());
+      titanicSurvivors.put("Third Class", classThreeRate.getSurvivorRate());
     }
     scanner.close();
   }
@@ -69,4 +62,23 @@ public class TitanicDataServlet extends HttpServlet {
     String json = gson.toJson(titanicSurvivors);
     response.getWriter().println(json);
   }
+}
+
+class TitanicStats {
+  Double totalPassengers; 
+  Double survived; 
+
+  TitanicStats () {
+    this.totalPassengers = 0.0;
+    this.survived = 0.0;
+    }
+
+  void addPassenger (Integer passenger) {
+    this.totalPassengers += 1;
+    this.survived += passenger;
+    }
+
+  Double getSurvivorRate () {
+    return (this.survived / this.totalPassengers);
+    }
 }
