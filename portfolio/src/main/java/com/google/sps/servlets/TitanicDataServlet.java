@@ -62,23 +62,24 @@ public class TitanicDataServlet extends HttpServlet {
     String json = gson.toJson(titanicSurvivors);
     response.getWriter().println(json);
   }
+
+  class TitanicStats {
+    Integer totalPassengers; 
+    Integer survived; 
+
+    TitanicStats() {
+      this.totalPassengers = 0;
+      this.survived = 0;
+    }
+
+    void addPassenger(Integer passenger) {
+      this.totalPassengers += 1;
+      this.survived += passenger;
+    }
+
+    Double getSurvivorRate() {
+      return (Double.valueOf(this.survived) / Double.valueOf(this.totalPassengers));
+    }
+  }
 }
 
-class TitanicStats {
-  Double totalPassengers; 
-  Double survived; 
-
-  TitanicStats () {
-    this.totalPassengers = 0.0;
-    this.survived = 0.0;
-    }
-
-  void addPassenger (Integer passenger) {
-    this.totalPassengers += 1;
-    this.survived += passenger;
-    }
-
-  Double getSurvivorRate () {
-    return (this.survived / this.totalPassengers);
-    }
-}
