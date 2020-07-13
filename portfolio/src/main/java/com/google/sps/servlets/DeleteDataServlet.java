@@ -34,7 +34,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 /** Servlet that deletes bucket list content*/
 @WebServlet("/delete-data")
-public class DeleteDataServlet extends HttpServlet 
+public class DeleteDataServlet extends HttpServlet {
 
   private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
