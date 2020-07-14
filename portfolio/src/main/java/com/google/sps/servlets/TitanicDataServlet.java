@@ -42,10 +42,17 @@ public class TitanicDataServlet extends HttpServlet {
         line = scanner.nextLine();   
         cells = line.split(",");   
       }
-
-      Integer passengerSurvived = Integer.valueOf(cells[FIRST_COLUMN_SURVIVED]);
-      System.out.println("survived?" + passengerSurvived);
+    
       Integer shipClass = Integer.valueOf(cells[SECOND_COLUMN_CLASS]);
+      Integer intPassengerSurvived = Integer.valueOf(cells[FIRST_COLUMN_SURVIVED]);
+      Boolean passengerSurvived = false;
+
+      if (intPassengerSurvived == 1) {
+          passengerSurvived = true;
+      }
+      else if (intPassengerSurvived == 0) {
+          passengerSurvived = false;
+      }
 
       switch (shipClass) {
         case FIRST_CLASS: 
@@ -92,8 +99,6 @@ public class TitanicDataServlet extends HttpServlet {
 
     Double getSurvivorPercent() {
       Double rate = (Double.valueOf(this.survived) / Double.valueOf(this.totalPassengers));
-      System.out.println(this.survived);
-      System.out.println(this.totalPassengers);
       return rate * 100;
     }
   }
