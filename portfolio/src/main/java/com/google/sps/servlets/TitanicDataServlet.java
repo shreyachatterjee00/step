@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/titanic-data")
 public class TitanicDataServlet extends HttpServlet {
 
+  /** Key = First, Second, Third Class, Value = % Survivors of that class **/
   private LinkedHashMap<String, Double> titanicSurvivors = new LinkedHashMap<>();
 
   private static final int FIRST_CLASS = 1;
@@ -36,22 +37,32 @@ public class TitanicDataServlet extends HttpServlet {
       String line = scanner.nextLine();
       String[] cells = line.split(",");
 
+      while (cells.length != 2) {
+        System.out.println("Error, too many or too little columns. Skipping line");
+        line = scanner.nextLine();   
+        cells = line.split(",");   
+      }
+
       Integer passengerSurvived = Integer.valueOf(cells[FIRST_COLUMN_SURVIVED]);
+      System.out.println("survived?" + passengerSurvived);
       Integer shipClass = Integer.valueOf(cells[SECOND_COLUMN_CLASS]);
 
       switch (shipClass) {
         case FIRST_CLASS: 
           classOneRate.addPassenger(passengerSurvived);
+          break;
         case SECOND_CLASS: 
           classTwoRate.addPassenger(passengerSurvived);
+          break;
         case THIRD_CLASS: 
           classThreeRate.addPassenger(passengerSurvived);
+          break;
       }
-
-      titanicSurvivors.put("First Class", classOneRate.getSurvivorRate());
-      titanicSurvivors.put("Second Class", classTwoRate.getSurvivorRate());
-      titanicSurvivors.put("Third Class", classThreeRate.getSurvivorRate());
     }
+    
+    titanicSurvivors.put("First Class", classOneRate.getSurvivorPercent());
+    titanicSurvivors.put("Second Class", classTwoRate.getSurvivorPercent());
+    titanicSurvivors.put("Third Class", classThreeRate.getSurvivorPercent());   
     scanner.close();
   }
 
@@ -63,7 +74,7 @@ public class TitanicDataServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
-  class TitanicStats {
+  static class TitanicStats {
     Integer totalPassengers; 
     Integer survived; 
 
@@ -72,13 +83,18 @@ public class TitanicDataServlet extends HttpServlet {
       this.survived = 0;
     }
 
-    void addPassenger(Integer passenger) {
+    void addPassenger(Boolean survived) {
       this.totalPassengers += 1;
-      this.survived += passenger;
+      if (survived) {
+        this.survived += 1;
+      }
     }
 
-    Double getSurvivorRate() {
-      return (Double.valueOf(this.survived) / Double.valueOf(this.totalPassengers));
+    Double getSurvivorPercent() {
+      Double rate = (Double.valueOf(this.survived) / Double.valueOf(this.totalPassengers));
+      System.out.println(this.survived);
+      System.out.println(this.totalPassengers);
+      return rate * 100;
     }
   }
 }
