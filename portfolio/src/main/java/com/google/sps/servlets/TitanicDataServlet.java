@@ -37,10 +37,9 @@ public class TitanicDataServlet extends HttpServlet {
       String line = scanner.nextLine();
       String[] cells = line.split(",");
 
-      while (cells.length != 2) {
+      if (cells.length != 2) {
         System.out.println("Error, too many or too little columns. Skipping line");
-        line = scanner.nextLine();   
-        cells = line.split(",");   
+        continue;   
       }
     
       Integer shipClass = Integer.valueOf(cells[SECOND_COLUMN_CLASS]);
