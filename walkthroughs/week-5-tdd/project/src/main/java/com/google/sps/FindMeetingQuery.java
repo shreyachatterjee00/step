@@ -27,18 +27,51 @@ import java.util.Collections;
 * the Time Range object will represent that entire chunk of time rather than 4pm - 5pm, even if the duration of meeting is 1 hour. 
 */
 public final class FindMeetingQuery {
-  public static final int MIN_INCREMENT = 10;
+  public static final int MIN_INCREMENT = 5;
 
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     long mtngDuration = request.getDuration();
     Collection<String> attendees = request.getAttendees();
+    Collection<String> optionalAttendees = request.getOptionalAttendees();
     Collection<Event> allEvents = events;
 
+    Collection<TimeRange> meetingTimes = new ArrayList<TimeRange>();
+
+    if (optionalAttendees.size() != 0) {
+      meetingTimes = optionalAttendees(allEvents, mtngDuration, optionalAttendees, attendees);
+    } else {
+        meetingTimes = noOptional(allEvents, mtngDuration, attendees);
+    }
+    return meetingTimes;
+  }
+
+   /** 
+   * If there are optional attendees, check if there is a meeting time present where mandatory and optional attendees can join. If not, act like there are no optional attendees. 
+   **/
+  public Collection<TimeRange> optionalAttendees (Collection<Event> allEvents, long mtngDuration, Collection<String> optionalAttendees, Collection<String> attendees) {
+    // Consolidate optional and mandatory attendees
+    Collection<String> allAttendees = new ArrayList<String>();
+    allAttendees.addAll(optionalAttendees);
+    allAttendees.addAll(attendees);
+    
+    // Try to find a meeting time where everyone can make it. If this is not possible, find a meeting time with just the mandatory attendees 
+    HashMap<Integer, Integer> mandatoryEvents = makeMandatoryEventMap(allEvents, allAttendees);
+    Collection<TimeRange> meetingTimes = findMeetingTimes(mtngDuration, mandatoryEvents);
+
+    if (meetingTimes.size() == 0) {
+      meetingTimes = noOptional(allEvents, mtngDuration, attendees);
+    }
+    return meetingTimes;
+  }
+
+  /**
+  * If there are no optional attendees, simply create a hash map of mandatory events and find times a meeting can take place. 
+  **/
+  public Collection<TimeRange> noOptional (Collection<Event> allEvents, long mtngDuration, Collection<String> attendees) {
     HashMap<Integer, Integer> mandatoryEvents = makeMandatoryEventMap(allEvents, attendees);
     Collection<TimeRange> meetingTimes = findMeetingTimes(mtngDuration, mandatoryEvents);
     return meetingTimes;
   }
-
 
   /** 
   * Create a hash map <event start time, event end time> that ONLY contains meetings where 1 or more people from attendees must attend. 
@@ -62,8 +95,7 @@ public final class FindMeetingQuery {
             else {
               break;
             }
-          }
-          else {
+          } else {
             mandatoryEvents.put(eventStartTime, eventEndTime);
           }
         }  
@@ -98,9 +130,8 @@ public final class FindMeetingQuery {
             
         currTime = longestMeetingEnd;
         startTime = longestMeetingEnd;
-      }
-      // If there is no event at this time, add MIN_INCREMENT minutes to the duration and current time, and run the loop again. 
-      else {
+      } else {
+        // If there is no event at this time, add MIN_INCREMENT minutes to the duration and current time, and run the loop again. 
         currDuration += MIN_INCREMENT;
         currTime += MIN_INCREMENT;
       }
