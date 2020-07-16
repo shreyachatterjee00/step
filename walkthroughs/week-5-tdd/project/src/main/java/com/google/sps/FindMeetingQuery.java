@@ -21,19 +21,30 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collections;
 
-
+/** 
+* Returns a Collection of TimeRange objects that span any available meeting times for all people in the MeetingRequest request.
+* For example, if 4pm - 8pm is free for a meeting, 
+* the Time Range object will represent that entire chunk of time rather than 4pm - 5pm, even if the duration of meeting is 1 hour. 
+*/
 public final class FindMeetingQuery {
+  public static final int MIN_INCREMENT = 10;
+
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     long mtngDuration = request.getDuration();
     Collection<String> attendees = request.getAttendees();
     Collection<Event> allEvents = events;
 
-    /* Return an array list of Time Range objects that span any available time. For example, if 4pm - 8pm is free for a meeting, 
-      the Time Range object will represent that entire chunk of time rather than 4pm - 5pm, even if the duration of meeting is 1 hour. */
-    Collection<TimeRange> meetingTimes = new ArrayList<TimeRange>();
+    HashMap<Integer, Integer> mandatoryEvents = makeMandatoryEventMap(allEvents, attendees);
+    Collection<TimeRange> meetingTimes = findMeetingTimes(mtngDuration, mandatoryEvents);
+    return meetingTimes;
+  }
 
-    // Create a hash map <start time, ArrayList<end time>> with only the meetings where one or more people from the meeting request MUST attend
-    HashMap<Integer, ArrayList<Integer>> mandatoryEvents = new HashMap<Integer, ArrayList<Integer>>();
+
+  /** 
+  * Create a hash map <event start time, event end time> that ONLY contains meetings where 1 or more people from attendees must attend. 
+  **/
+  public HashMap<Integer, Integer> makeMandatoryEventMap (Collection<Event> allEvents, Collection<String> attendees) {
+    HashMap<Integer, Integer> mandatoryEvents = new HashMap<Integer, Integer>();
 
     for (Event event : allEvents) {
       //people who must attend 
@@ -41,70 +52,83 @@ public final class FindMeetingQuery {
       //check if any people in meeting request is present in this set
       for (String person : attendees) {
         if (people.contains(person)) {
-          // If event already exists in hash map, add the end time to the ArrayList of end times. Otherwise, create an ArrayList for end times and add event to hash map.
+          // If there's already an event with this start time in the map, but the current end time is later, add the current instead.  
           int eventStartTime = event.getWhen().start();
           int eventEndTime = event.getWhen().end();
           if (mandatoryEvents.containsKey(eventStartTime)) {
-            ArrayList<Integer> currEndTimes = mandatoryEvents.get(eventStartTime);
-            currEndTimes.add(eventEndTime);
+            if (eventEndTime > mandatoryEvents.get(eventStartTime)) {
+              mandatoryEvents.put(eventStartTime, eventEndTime);
+            }
+            else {
+              break;
+            }
           }
           else {
-            ArrayList<Integer> newEndTimes = new ArrayList<Integer>();
-            newEndTimes.add(eventEndTime);
-            mandatoryEvents.put(eventStartTime, newEndTimes);
+            mandatoryEvents.put(eventStartTime, eventEndTime);
           }
         }  
       }
     }
 
+    return mandatoryEvents;
+  }
+
+  /**
+  * Create and return an ArrayList of TimeRange objects that span available meeting times.
+  */
+  public Collection<TimeRange> findMeetingTimes (long mtngDuration, HashMap<Integer, Integer> mandatoryEvents) {
+    Collection<TimeRange> meetingTimes = new ArrayList<TimeRange>();
     int currTime = TimeRange.START_OF_DAY;
     int startTime = TimeRange.START_OF_DAY;
     int currDuration = 0;
 
     while (currTime < TimeRange.END_OF_DAY) {
-      /* If there's an event starting at this time, compare the current duration and meeting duration to see if there is a possible meeting time. 
-        Reset the current duration variable, move the current time to the end time of the event, and repeat loop. */
+      // If there's an event starting at this time, compare the current duration and meeting duration to see if there is a possible meeting time. 
+      // Reset the current duration variable, move the current time to the end time of the event, and repeat loop. 
       if (mandatoryEvents.containsKey(currTime)) {
-        ArrayList<Integer> endTimes = mandatoryEvents.get(currTime);
-        // Get list item with latest end time
-        int longestMeetingEnd = Collections.max(endTimes); 
+        int longestMeetingEnd = mandatoryEvents.get(currTime);
         if (currDuration >= mtngDuration) {
-            // Not inclusive because a meeting starts at this time 
-            meetingTimes.add(TimeRange.fromStartEnd(startTime, currTime, false));
+          // Not inclusive because a meeting starts at this time 
+          meetingTimes.add(TimeRange.fromStartEnd(startTime, currTime, /* inclusive = */ false));
         }
         currDuration = 0;
 
         // Check if there is a conflict: another meeting that starts during this one, and goes later
-        int tempTime = currTime + 10;
-        int currentEventEnd = longestMeetingEnd;
-        while (tempTime < currentEventEnd) {
-          if (mandatoryEvents.containsKey(tempTime)) {
-            ArrayList<Integer> conflictMeetingEndTimes = mandatoryEvents.get(tempTime);
-            int meetingEnd = Collections.max(conflictMeetingEndTimes);
-            if (meetingEnd > longestMeetingEnd) {
-              longestMeetingEnd = meetingEnd;
-            }
-          }
-          tempTime += 10;
-        }
-          
-      currTime = longestMeetingEnd;
-      startTime = longestMeetingEnd;
+        longestMeetingEnd = isConflict(currTime, longestMeetingEnd, mandatoryEvents);
+            
+        currTime = longestMeetingEnd;
+        startTime = longestMeetingEnd;
       }
-
-      /* If there is no event at this time, add 30 minutes to the duration and current time, and run the loop again. */
+      // If there is no event at this time, add MIN_INCREMENT minutes to the duration and current time, and run the loop again. 
       else {
-        currDuration += 10;
-        currTime +=10;
-       }
+        currDuration += MIN_INCREMENT;
+        currTime += MIN_INCREMENT;
+      }
     }
 
-    /* When reaching the end of loop, if the current duration is longer than what is necessary, add it to the return Collection, inclusive. */
-    if (currTime > TimeRange.END_OF_DAY) {
-      if (currDuration >= mtngDuration) {
-        meetingTimes.add(TimeRange.fromStartEnd(startTime, TimeRange.END_OF_DAY, true));
-      }
+    // When reaching the end of loop, if the current duration is longer than what is necessary, add it to the return Collection, inclusive. 
+    if (currTime > TimeRange.END_OF_DAY && currDuration >= mtngDuration) {
+      meetingTimes.add(TimeRange.fromStartEnd(startTime, TimeRange.END_OF_DAY, /* inclusive = */ true));
     }
     return meetingTimes;
+  }
+
+  /**
+  * Check if there is a conflict: another meeting that starts during this one, and goes later. 
+  * Return the later time if there is a conflicting meeting. 
+  **/
+  public int isConflict (int currTime, int longestMeetingEnd, HashMap<Integer, Integer> mandatoryEvents) {
+    int tempTime = currTime + 10;
+    int currentEventEnd = longestMeetingEnd;
+    while (tempTime < currentEventEnd) {
+      if (mandatoryEvents.containsKey(tempTime)) {
+        int meetingEnd = mandatoryEvents.get(tempTime);
+        if (meetingEnd > longestMeetingEnd) {
+          longestMeetingEnd = meetingEnd;
+        }
+      }
+      tempTime += 10;
+    }
+    return longestMeetingEnd;
   }
 }
