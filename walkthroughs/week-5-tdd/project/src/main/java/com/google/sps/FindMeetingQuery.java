@@ -27,26 +27,29 @@ public final class FindMeetingQuery {
   public static final int MIN_INCREMENT = 10;
 
   /** 
-  * Returns a Collection of {@code TimeRange} objects that span any available meeting times for all people in the MeetingRequest request.
+  * Returns a Collection of {@link TimeRange} objects that 
+  * span any available meeting times for all people in the MeetingRequest request.
   * For example, if 4pm - 8pm is free for a meeting, 
-  * the Time Range object will represent that entire chunk of time rather than 4pm - 5pm, even if the duration of meeting is 1 hour. 
+  * the Time Range object will represent that 
+  * entire chunk of time rather than 4pm - 5pm, even if the duration of meeting is 1 hour. 
   */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    long mtngDuration = request.getDuration();
-    Collection<String> attendees = request.getAttendees();
-    Collection<Event> allEvents = events;
-
-    // Mandatory events = events that must be attended by an attended in the Meeting Request
-    HashMap<Integer, Integer> mandatoryEvents = makeMandatoryEventMap(allEvents, attendees);
-    Collection<TimeRange> meetingTimes = findMeetingTimes(mtngDuration, mandatoryEvents);
+    // Mandatory events are events that must be attended by an attended in the {@link Meeting Request}
+    HashMap<Integer, Integer> mandatoryEvents = makeMandatoryEventMap(events, request);
+    Collection<TimeRange> meetingTimes = findMeetingTimes(request, mandatoryEvents);
     return meetingTimes;
   }
 
   /** 
-  * Creates a hash map <event start time, event end time> that ONLY contains meetings where 1 or more people from attendees must attend. 
+  * Creates a hash map <event start time, event end time> that ONLY contains meetings 
+  * where 1 or more people from attendees must attend. 
+  * If there are two meetings with the same start time,
+  * only the one with a later end time is saved.
   **/
-  public HashMap<Integer, Integer> makeMandatoryEventMap (Collection<Event> allEvents, Collection<String> attendees) {
+  public HashMap<Integer, Integer> makeMandatoryEventMap (Collection<Event> events, MeetingRequest request) {
     HashMap<Integer, Integer> mandatoryEvents = new HashMap<Integer, Integer>();
+    Collection<String> attendees = request.getAttendees();
+    ArrayList<Event> allEvents = new ArrayList<>(events);
 
     for (Event event : allEvents) {
       //check if any people in meeting request is present in this set
@@ -69,10 +72,11 @@ public final class FindMeetingQuery {
   }
 
   /**
-  * Creates and returns an ArrayList of TimeRange objects that span available meeting times.
+  * Creates and returns an {@link Collection} of {@link TimeRange} objects that span available meeting times.
   */
-  public Collection<TimeRange> findMeetingTimes (long mtngDuration, HashMap<Integer, Integer> mandatoryEvents) {
+  public Collection<TimeRange> findMeetingTimes (MeetingRequest request, HashMap<Integer, Integer> mandatoryEvents) {
     Collection<TimeRange> meetingTimes = new ArrayList<TimeRange>();
+    long mtngDuration = request.getDuration();
     int currTime = TimeRange.START_OF_DAY;
     int startTime = TimeRange.START_OF_DAY;
     int currDuration = 0;
@@ -101,7 +105,7 @@ public final class FindMeetingQuery {
     }
 
     // When reaching the end of loop, if the current duration is longer than what is necessary, add it to the return Collection, inclusive. 
-    if (currTime > TimeRange.END_OF_DAY && currDuration >= mtngDuration) {
+    if (currTime >= TimeRange.END_OF_DAY && currDuration >= mtngDuration) {
       meetingTimes.add(TimeRange.fromStartEnd(startTime, TimeRange.END_OF_DAY, /* inclusive = */ true));
     }
     return meetingTimes;
@@ -121,7 +125,7 @@ public final class FindMeetingQuery {
           longestMeetingEnd = meetingEnd;
         }
       }
-      tempTime += 10;
+      tempTime += MIN_INCREMENT;
     }
     return longestMeetingEnd;
   }
