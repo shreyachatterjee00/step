@@ -27,52 +27,28 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 
-/** Servlet that returns bucket list content */
-@WebServlet("/data")
-public class DataServlet extends HttpServlet {
+/** Servlet that deletes bucket list content*/
+@WebServlet("/delete-data")
+public class DeleteDataServlet extends HttpServlet {
 
-  private static final String COMMENT_PARAMETER = "comment-area";
-  private static final String TIME = "time";
-  private static final String ITEM = "item";
   private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-  @Override
+  @Override 
+  /* Get all elements in the entity, get keys for each, delete all */
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String comment = request.getParameter(COMMENT_PARAMETER);
-    Long timestamp = System.currentTimeMillis();
 
-    Entity bucketListEntity = new Entity(Constants.ENTITY_KIND);
-    bucketListEntity.setProperty(ITEM, comment);
-    bucketListEntity.setProperty(TIME, timestamp);
-
-    datastore.put(bucketListEntity);
-    
-    response.setContentType("text/html;");
-    response.getWriter().println(comment);
-    response.sendRedirect("/index.html");
-  }
-
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query(Constants.ENTITY_KIND).addSort(TIME, SortDirection.ASCENDING);
-
+    Query query = new Query(Constants.ENTITY_KIND);
     PreparedQuery results = datastore.prepare(query);
 
-    ArrayList<String> buckList = new ArrayList<String>();
     for (Entity entity : results.asIterable()) {
-      String item = (String) entity.getProperty(ITEM);
-      buckList.add(item);
+      Key entityKey = entity.getKey();
+      datastore.delete(entityKey);
     }
-
-    String json = convertMsgToJSON(buckList);
-    response.setContentType("application/json;");
-    response.getWriter().println(json);
   }
- 
-  private String convertMsgToJSON(ArrayList<String> listParam) {
-    Gson gson = new Gson();
-    String json = gson.toJson(listParam);
-    return json;
-  }
+  
 }

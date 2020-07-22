@@ -1,9 +1,108 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
+.site-background {
+  background-image: url("/images/stars.jpg");
+  font-family: monospace;
+}
+
+.header {
+  font-size: 300%;
+  margin-left: 30%;
+  margin-top: 20%;
+  color: #5f91ff;
+}
+
+ul {
+  list-style-type: none;
+  margin-left: 27.75%;
+}
+
+li {
+  float: left;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+li a {
+  background-color: #9FA0C3;
+  border-bottom: 1px solid #5f91ff;
+  color: black;
+  font-size: 120%;
+  font-style: italic;
+  padding: 24px;
+  text-align: center;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #89C8D2;
+  cursor: pointer;
+}
+
+.background {
+  background-color: #89C8D2;
+  margin-left: 29.75%;
+  margin-right: 43%;
+  margin-top: 7%;
+  padding: 20px;
+}
+
+.image-hide {
+  display: none;
+}
+
+.image-show {
+  display: block;
   width: 650px;
 }
 
-#greeting-container {
-  margin-top: 20px;
+.about-hide {
+  display: none;
 }
+
+.about-show {
+  display: block;
+}
+
+.bucket-list {
+  background-color: #9FA0C3;
+  border-bottom: 2px solid #5f91ff;
+  height: 500px;
+  margin-left: 30%;
+  margin-right: 60%;
+  margin-top: 5%;
+  padding: 20px;
+}
+
+.list-header {
+  color: black;
+  font-size: 120%;
+  font-style: italic;
+}
+
+.libraries {
+  background-color: #9FA0C3;
+  border-bottom: 2px solid #5f91ff;
+  margin-left: 41.7%;
+  margin-right: 37.8%;
+  margin-top: -21.22%;
+  padding: 20px
+}
+
+.sentiment {
+  background-color: #9FA0C3;
+  border-bottom: 2px solid #5f91ff;
+  margin-left: 41.7%;
+  margin-right: 49%;
+  margin-top: 1%;
+  padding: 20px
+}
+
+.entity {
+  background-color: #9FA0C3;
+  border-bottom: 2px solid #5f91ff;
+  margin-left: 53%;
+  margin-right: 37.8%;
+  margin-top: -12.7%;
+  padding: 20px;
+}
+
+

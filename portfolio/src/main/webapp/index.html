@@ -6,13 +6,53 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body>
-    <div id="content">
-      <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
+  <body class="site-background" onload="getBucketList()">
+    <div class="header">
+      <h1>Hi, I'm Shreya.</h1>
+    </div>
+    <ul> 
+      <li><a href="stars.html">Stars!</a></li>
+      <li><a onclick="showAbout()">About Me</a></li>
+      <li><a onclick="showPics()">Random Picture from my Life!</a></li>
+      <li><a href="https://www.linkedin.com/in/shreya-chatterjee-79700514b">LinkedIn</a></li>
+    </ul>
+    <p id ="aboutSpace" class="about-hide"> I'm a rising junior at UCLA, majoring in Linguistics and Computer Science (that's one major)! 
+      In my free time, I enjoy reading and playing the piano.  
+      Recently, I've started learning to cook (I'm going to need this for my college apartment next year) 
+      and playing Stardew Valley (turns out video games are a great way to stay connected to friends during this time)!
+    </p>
+    <img id="picSpace" class="image-hide" src=""/>
+    <div class="bucket-list">
+      <p class="list-header">Create a Bucket List!</p>
+      <form action="/data" method="POST">
+        <textarea name="comment-area" placeholder="Bucket List Item"></textarea>
+        <br></br>
+        <input type="submit" value="Add"></input>
+        <input type="submit" value="Delete All" onclick="deleteData()"></input>
+      </form>
+      <br></br>
+      <div id="list-container"></div>
+    </div>
+    <div class="libraries">
+      <p class="list-header">Sentiment Score & Entity Extraction</p>
+      <p>The <strong> Natural Language API </strong> consists of Machine Learning models that understand and extract features of sentences. Very interesting stuff for the Linguist in me!</p>
+    </div>
+    <div class="sentiment">
+      <p>The ML models in the API generate a sentiment score of a sentence from -1 to 1, depending on how positive or negative the message is. Find out the score for your sentence here!</p>
+      <textarea name="sentiment-comment" id="sent-id" aria-label="Message for sentiment score" placeholder="Enter a Sentence"></textarea>
+      <br></br>
+      <input type="submit" value="Get Score" onclick="doSentAnalysis()"></input>
+      <br></br>
+      <div id="sentiment-container"></div>
+    </div>
+    <br></br>
+    <div class="entity">
+      <p>The models can also extract 'entities' of sentences, such as people, organizations, etc. Get a list of entities in your message here!</p>
+      <textarea name="entity-comment" id ="ent-id" aria-label="Message for entity extraction" placeholder="Enter a Sentence"></textarea>
+      <br></br>
+      <input type="submit" value="Get Entities" onclick="doEntExtraction()"></input>
+      <br></br>
+      <div id="entity-container"></div>
     </div>
   </body>
 </html>
