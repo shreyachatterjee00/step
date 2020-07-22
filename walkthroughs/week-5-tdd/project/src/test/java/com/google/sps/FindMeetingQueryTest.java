@@ -124,7 +124,7 @@ public final class FindMeetingQueryTest {
   }
   
   @Test 
-  public void OptionalAttendeeAllDayEvent () {
+  public void optionalAttendeeAllDayEvent () {
     // Have each person have different events. We should see three options because each person has
     // split the restricted times. Optional person C has a meeting all day, is disregarded. 
     //
@@ -161,7 +161,7 @@ public final class FindMeetingQueryTest {
     // Events  :       |--A--|     |--B--|
     // Optional:              |--C--|
     // Day     : |-----------------------------|
-    // Options : |--1--|              |--3--|
+    // Options : |--1--|              |--2--|
 
     Collection<Event> events = Arrays.asList(
         new Event("Event 1", TimeRange.fromStartDuration(TIME_0800AM, DURATION_30_MINUTES),
@@ -290,7 +290,7 @@ public final class FindMeetingQueryTest {
     // have the meeting. With optional Person C, there is not enough time, so disregard them. 
     //
     // Events  : |--A--|     |----A----|
-    // Optional:       |-C-|
+    // Optional:         |-C-|
     // Day     : |---------------------|
     // Options :       |-----|
 
@@ -344,7 +344,7 @@ public final class FindMeetingQueryTest {
     //
     // Events  : |--A-----| |-----A----|
     // Day     : |---------------------|
-    // Options :
+    // Options : |!!!!!!!!!!!!!!!!!!!!!| -> no options
 
     Collection<Event> events = Arrays.asList(
         new Event("Event 1", TimeRange.fromStartEnd(TimeRange.START_OF_DAY, TIME_0830AM, false),

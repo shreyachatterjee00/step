@@ -31,35 +31,26 @@ public final class FindMeetingQuery {
 
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     long mtngDuration = request.getDuration();
-    Collection<String> attendees = request.getAttendees();
+    Collection<String> mandatoryAttendees = request.getAttendees();
     Collection<String> optionalAttendees = request.getOptionalAttendees();
     Collection<Event> allEvents = events;
 
     Collection<TimeRange> meetingTimes = new ArrayList<TimeRange>();
 
     if (optionalAttendees.size() != 0) {
-      meetingTimes = optionalAttendees(allEvents, mtngDuration, optionalAttendees, attendees);
-    } else {
-        meetingTimes = noOptional(allEvents, mtngDuration, attendees);
-    }
-    return meetingTimes;
-  }
-
-   /** 
-   * If there are optional attendees, check if there is a meeting time present where mandatory and optional attendees can join. If not, act like there are no optional attendees. 
-   **/
-  public Collection<TimeRange> optionalAttendees (Collection<Event> allEvents, long mtngDuration, Collection<String> optionalAttendees, Collection<String> attendees) {
-    // Consolidate optional and mandatory attendees
-    Collection<String> allAttendees = new ArrayList<String>();
-    allAttendees.addAll(optionalAttendees);
-    allAttendees.addAll(attendees);
+      Collection<String> allAttendees = new ArrayList<String>();
+      allAttendees.addAll(optionalAttendees);
+      allAttendees.addAll(mandatoryAttendees);
     
-    // Try to find a meeting time where everyone can make it. If this is not possible, find a meeting time with just the mandatory attendees 
-    HashMap<Integer, Integer> mandatoryEvents = makeMandatoryEventMap(allEvents, allAttendees);
-    Collection<TimeRange> meetingTimes = findMeetingTimes(mtngDuration, mandatoryEvents);
+      HashMap<Integer, Integer> mandatoryEvents = makeMandatoryEventMap(allEvents, allAttendees);
+      meetingTimes = findMeetingTimes(mtngDuration, mandatoryEvents);
 
-    if (meetingTimes.size() == 0) {
-      meetingTimes = noOptional(allEvents, mtngDuration, attendees);
+      if (meetingTimes.size() == 0) {
+        meetingTimes = findMeetingTimes(allEvents, mtngDuration, mandatoryAttendees);
+      }
+    }
+    else {
+        meetingTimes = findMeetingTimes(allEvents, mtngDuration, mandatoryAttendees);
     }
     return meetingTimes;
   }
@@ -67,7 +58,7 @@ public final class FindMeetingQuery {
   /**
   * If there are no optional attendees, simply create a hash map of mandatory events and find times a meeting can take place. 
   **/
-  public Collection<TimeRange> noOptional (Collection<Event> allEvents, long mtngDuration, Collection<String> attendees) {
+  public Collection<TimeRange> findMeetingTimes (Collection<Event> allEvents, long mtngDuration, Collection<String> attendees) {
     HashMap<Integer, Integer> mandatoryEvents = makeMandatoryEventMap(allEvents, attendees);
     Collection<TimeRange> meetingTimes = findMeetingTimes(mtngDuration, mandatoryEvents);
     return meetingTimes;
