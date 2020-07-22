@@ -20,15 +20,19 @@ import java.util.Set;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.stream.Stream;
 
-/** 
-* Returns a Collection of TimeRange objects that span any available meeting times for all people in the MeetingRequest request.
-* For example, if 4pm - 8pm is free for a meeting, 
-* the Time Range object will represent that entire chunk of time rather than 4pm - 5pm, even if the duration of meeting is 1 hour. 
-*/
+
 public final class FindMeetingQuery {
   public static final int MIN_INCREMENT = 5;
 
+  /** 
+  * Returns a Collection of {@link TimeRange} objects that 
+  * span any available meeting times for all people in the MeetingRequest request.
+  * For example, if 4pm - 8pm is free for a meeting, 
+  * the Time Range object will represent that 
+  * entire chunk of time rather than 4pm - 5pm, even if the duration of meeting is 1 hour. 
+  */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     long mtngDuration = request.getDuration();
     Collection<String> mandatoryAttendees = request.getAttendees();
@@ -63,14 +67,16 @@ public final class FindMeetingQuery {
   }
 
   /** 
-  * Create a hash map <event start time, event end time> that ONLY contains meetings where 1 or more people from attendees must attend. 
+  * Creates a hash map <event start time, event end time> that ONLY contains meetings 
+  * where 1 or more people from attendees must attend. 
+  * If there are two meetings with the same start time,
+  * only the one with a later end time is saved.
   **/
-  public HashMap<Integer, Integer> makeMandatoryEventMap (Collection<Event> allEvents, Collection<String> attendees) {
+  public HashMap<Integer, Integer> makeMandatoryEventMap (Collection<Event> events, MeetingRequest request) {
     HashMap<Integer, Integer> mandatoryEvents = new HashMap<Integer, Integer>();
+    Collection<String> attendees = request.getAttendees();
 
-    for (Event event : allEvents) {
-      //people who must attend 
-      Set<String> people = event.getAttendees();
+    for (Event event : events) {
       //check if any people in meeting request is present in this set
       for (String person : attendees) {
         if (people.contains(person)) {
@@ -87,27 +93,29 @@ public final class FindMeetingQuery {
           } else {
             mandatoryEvents.put(eventStartTime, eventEndTime);
           }
-        }  
+        } else {
+          mandatoryEvents.put(eventStartTime, eventEndTime);
+        }
       }
     }
-
     return mandatoryEvents;
   }
 
   /**
-  * Create and return an ArrayList of TimeRange objects that span available meeting times.
+  * Creates and returns an {@link Collection} of {@link TimeRange} objects that span available meeting times.
   */
   public Collection<TimeRange> getMtngAvailabilitySlots (long mtngDuration, HashMap<Integer, Integer> mandatoryEvents) {
     Collection<TimeRange> meetingTimes = new ArrayList<TimeRange>();
+    long mtngDuration = request.getDuration();
     int currTime = TimeRange.START_OF_DAY;
     int startTime = TimeRange.START_OF_DAY;
     int currDuration = 0;
 
     while (currTime < TimeRange.END_OF_DAY) {
-      // If there's an event starting at this time, compare the current duration and meeting duration to see if there is a possible meeting time. 
+      // If there's an event starting at this time, see if there is a possible meeting time. 
       // Reset the current duration variable, move the current time to the end time of the event, and repeat loop. 
       if (mandatoryEvents.containsKey(currTime)) {
-        int longestMeetingEnd = mandatoryEvents.get(currTime);
+        int currentLongest = mandatoryEvents.get(currTime);
         if (currDuration >= mtngDuration) {
           // Not inclusive because a meeting starts at this time 
           meetingTimes.add(TimeRange.fromStartEnd(startTime, currTime, /* inclusive = */ false));
@@ -115,7 +123,7 @@ public final class FindMeetingQuery {
         currDuration = 0;
 
         // Check if there is a conflict: another meeting that starts during this one, and goes later
-        longestMeetingEnd = isConflict(currTime, longestMeetingEnd, mandatoryEvents);
+        int longestMeetingEnd = getLongestEventEnd(currTime, currentLongest, mandatoryEvents);
             
         currTime = longestMeetingEnd;
         startTime = longestMeetingEnd;
@@ -127,18 +135,18 @@ public final class FindMeetingQuery {
     }
 
     // When reaching the end of loop, if the current duration is longer than what is necessary, add it to the return Collection, inclusive. 
-    if (currTime > TimeRange.END_OF_DAY && currDuration >= mtngDuration) {
+    if (currTime >= TimeRange.END_OF_DAY && currDuration >= mtngDuration) {
       meetingTimes.add(TimeRange.fromStartEnd(startTime, TimeRange.END_OF_DAY, /* inclusive = */ true));
     }
     return meetingTimes;
   }
 
   /**
-  * Check if there is a conflict: another meeting that starts during this one, and goes later. 
-  * Return the later time if there is a conflicting meeting. 
+  * Checks if there is a conflict: another meeting that starts during this one, and goes later. 
+  * Returns the later time if there is a conflicting meeting. 
   **/
-  public int isConflict (int currTime, int longestMeetingEnd, HashMap<Integer, Integer> mandatoryEvents) {
-    int tempTime = currTime + 10;
+  public int getLongestEventEnd (int currTime, int longestMeetingEnd, HashMap<Integer, Integer> mandatoryEvents) {
+    int tempTime = currTime + MIN_INCREMENT;
     int currentEventEnd = longestMeetingEnd;
     while (tempTime < currentEventEnd) {
       if (mandatoryEvents.containsKey(tempTime)) {
@@ -147,7 +155,7 @@ public final class FindMeetingQuery {
           longestMeetingEnd = meetingEnd;
         }
       }
-      tempTime += 10;
+      tempTime += MIN_INCREMENT;
     }
     return longestMeetingEnd;
   }
