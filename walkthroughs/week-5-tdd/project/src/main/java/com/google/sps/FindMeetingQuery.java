@@ -42,14 +42,12 @@ public final class FindMeetingQuery {
       allAttendees.addAll(optionalAttendees);
       allAttendees.addAll(mandatoryAttendees);
     
-      HashMap<Integer, Integer> mandatoryEvents = makeMandatoryEventMap(allEvents, allAttendees);
-      meetingTimes = findMeetingTimes(mtngDuration, mandatoryEvents);
+      meetingTimes = findMeetingTimes(allEvents, mtngDuration, allAttendees);
 
       if (meetingTimes.size() == 0) {
         meetingTimes = findMeetingTimes(allEvents, mtngDuration, mandatoryAttendees);
       }
-    }
-    else {
+    } else {
         meetingTimes = findMeetingTimes(allEvents, mtngDuration, mandatoryAttendees);
     }
     return meetingTimes;
@@ -60,7 +58,7 @@ public final class FindMeetingQuery {
   **/
   public Collection<TimeRange> findMeetingTimes (Collection<Event> allEvents, long mtngDuration, Collection<String> attendees) {
     HashMap<Integer, Integer> mandatoryEvents = makeMandatoryEventMap(allEvents, attendees);
-    Collection<TimeRange> meetingTimes = findMeetingTimes(mtngDuration, mandatoryEvents);
+    Collection<TimeRange> meetingTimes = getMtngAvailabilitySlots(mtngDuration, mandatoryEvents);
     return meetingTimes;
   }
 
@@ -99,7 +97,7 @@ public final class FindMeetingQuery {
   /**
   * Create and return an ArrayList of TimeRange objects that span available meeting times.
   */
-  public Collection<TimeRange> findMeetingTimes (long mtngDuration, HashMap<Integer, Integer> mandatoryEvents) {
+  public Collection<TimeRange> getMtngAvailabilitySlots (long mtngDuration, HashMap<Integer, Integer> mandatoryEvents) {
     Collection<TimeRange> meetingTimes = new ArrayList<TimeRange>();
     int currTime = TimeRange.START_OF_DAY;
     int startTime = TimeRange.START_OF_DAY;
