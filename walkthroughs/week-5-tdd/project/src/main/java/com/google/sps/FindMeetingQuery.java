@@ -34,7 +34,7 @@ public final class FindMeetingQuery {
   * entire chunk of time rather than 4pm - 5pm, even if the duration of meeting is 1 hour. 
   */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    // Mandatory events are events that must be attended by an attended in the {@link Meeting Request}
+    // Mandatory events are events that must be attended by an mandatory attendee in the {@link Meeting Request}
     HashMap<Integer, Integer> mandatoryEvents = makeMandatoryEventMap(events, request);
     Collection<TimeRange> meetingTimes = findMeetingTimes(request, mandatoryEvents);
     return meetingTimes;
@@ -49,9 +49,8 @@ public final class FindMeetingQuery {
   public HashMap<Integer, Integer> makeMandatoryEventMap (Collection<Event> events, MeetingRequest request) {
     HashMap<Integer, Integer> mandatoryEvents = new HashMap<Integer, Integer>();
     Collection<String> attendees = request.getAttendees();
-    ArrayList<Event> allEvents = new ArrayList<>(events);
 
-    for (Event event : allEvents) {
+    for (Event event : events) {
       //check if any people in meeting request is present in this set
       boolean mtngAttendeeInEvent = attendees.stream().anyMatch(attendee -> event.getAttendees().contains(attendee));
 
